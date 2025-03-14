@@ -13,7 +13,8 @@ class Opening:
     name: str
     moves: tuple[str]
     eco: str
-    data: dict
+    data: dict[str, dict[str, float]]  # key is time control, value is dict with winrate/plays/etc.
+
     def __init__(self, eco: str, name: str, moves: tuple[str], data: dict = None):
         self.name = name
         self.moves = moves
@@ -21,14 +22,17 @@ class Opening:
         self.data = {} if not data else data
 
     def __str__(self) -> str:
-        """Return a pretty formatted representation of this opening.
+        """Return the name of this opening.
         
         >>> print(Opening('A00', 'Opening A00', ['d4', 'idk']))
         Opening A00
         """
         return self.name
     
-    def get_data(self, time_control: str, high_elo: bool):
+    def get_data(self, time_control: str):
+        """
+        Get the relevant data for this opening based on the time control given.
+        """
         return self.data[time_control]
 
 # class OpeningTree:

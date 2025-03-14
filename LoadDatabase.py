@@ -6,10 +6,13 @@ import csv
 
 MAX_MOVE_LENGTH = 5
 
-
-def create_dataframe(max_moves: int) -> pd.DataFrame:
+def create_dataframe(path: str, max_moves: int) -> pd.DataFrame:
     """
-    Create a dataframe of known chess openings, restricted to the max number of moves given.
+    Create a dataframe of known chess openings, restricted to the max number of moves given from the
+    .tsv files located in the given path
+
+    Preconditions:
+        - max_moves = 0
     """
     data = {
         "eco": [],
@@ -19,7 +22,7 @@ def create_dataframe(max_moves: int) -> pd.DataFrame:
     }
     # Load all relevant data from the .tsv files first into a list before converting to dataframe
     for letter in "abcde":
-        filepath = f"data/openings/{letter}.tsv"
+        filepath = f"{path}/{letter}.tsv"
         with open(filepath) as file:
             reader = csv.reader(file, delimiter="\t")
             next(reader)  # clear headers
@@ -50,6 +53,6 @@ def generate_tree(data: pd.DataFrame) -> Tree:
         op_tree.insert_sequence(path, opening)
     return op_tree
 
-tree = generate_tree(create_dataframe(5))
+tree = generate_tree(create_dataframe("data/openings", MAX_MOVE_LENGTH))
 print(tree)
 
