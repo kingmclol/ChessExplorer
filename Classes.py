@@ -11,20 +11,25 @@ class Opening:
     - eco: ECO label for this opening
     """
     name: str
-    moves: list[str]
+    moves: tuple[str]
     eco: str
-    def __init__(self, eco: str, name: str, moves: list[str]):
+    data: dict
+    def __init__(self, eco: str, name: str, moves: tuple[str], data: dict = None):
         self.name = name
         self.moves = moves
         self.eco = eco
+        self.data = {} if not data else data
 
     def __str__(self) -> str:
         """Return a pretty formatted representation of this opening.
         
         >>> print(Opening('A00', 'Opening A00', ['d4', 'idk']))
-        (A00) Opening A00 ['d4', 'idk']
+        Opening A00
         """
-        return f"({self.eco}) {self.name} {str(self.moves)}"
+        return self.name
+    
+    def get_data(self, time_control: str, high_elo: bool):
+        return self.data[time_control]
 
 # class OpeningTree:
 #     """
@@ -32,7 +37,7 @@ class Opening:
 #     """
 #     # Private Instance Attributes:
 #     #  - _opening: An opening object that represents this chess opening
-#     #  - _responses: The response opening to this opening
+#     #  - _responses: The response openings to this opening
 #     _opening: Optional[Opening]
 #     _responses: list[OpeningTree]
 
@@ -51,6 +56,26 @@ class Opening:
 #             size += sum(response.__len__() for response in self._responses)
 #             return size
     
+#     def add_opening(self, opening: Opening) -> None:
+#         path = opening.moves
+#         self._insert_sequence(path, opening)
+
+#     def _insert_sequence(self, path: list[str], opening: Opening):
+#         if not path:  # An empty path always exists.
+#             return
+#         else:
+#             existing = False
+#             for response in self._responses:
+#                 if response._root == path[0]:  # found an existing path go continue
+#                     response.insert_sequence(path[1:])
+#                     existing = True
+#                     break
+
+#             if not existing:  # existing subtree not found; create own
+#                 new_sub = OpeningTree(
+#                     Opening("N/A", "Name="), [])
+#                 self._responses.append(new_sub)
+#                 new_sub.insert_sequence(path[1:])
     
 #     def get_opening(self) -> Opening:
 #         return self._opening
@@ -76,7 +101,7 @@ class Tree:
     #       of just one item.
     _root: Optional[Any]
     _subtrees: list[Tree]
-
+    _data: Optional[Any]
     def __init__(self, root: Optional[Any], subtrees: list[Tree]) -> None:
         """Initialize a new Tree with the given root value and subtrees.
 
@@ -87,6 +112,7 @@ class Tree:
         """
         self._root = root
         self._subtrees = subtrees
+        self._data = None
 
     def is_empty(self) -> bool:
         """Return whether this tree is empty.
@@ -157,7 +183,7 @@ class Tree:
         if self.is_empty():
             return ''
         else:
-            str_so_far = '  ' * depth + f'{self._root}\n'
+            str_so_far = '  ' * depth + f'{self._root}' + f'{'' if self._data is None else f" | {self._data}"}' + '\n'
             for subtree in self._subtrees:
                 # Note that the 'depth' argument to the recursive call is
                 # modified.
@@ -230,7 +256,7 @@ class Tree:
         else:
             return f"Tree({self._root}, {subtree_repr})"
 
-    def insert_sequence(self, items: list) -> None:
+    def insert_sequence(self, items: list, data: Any = None) -> None:
         """Insert the given items into this tree.
 
         The inserted items form a chain of descendants, where:
@@ -240,22 +266,6 @@ class Tree:
             - etc.
 
         Do nothing if items is empty.
-
-        The root of this chain (i.e. items[0]) should be added as a new subtree within this tree, as long as items[0]
-        does not already exist as a child of the current root node. That is, create a new subtree for it
-        and append it to this tree's existing list of subtrees.
-
-        If items[0] is already a child of this tree's root, instead recurse into that existing subtree rather
-        than create a new subtree with items[0]. If there are multiple occurrences of items[0] within this tree's
-        children, pick the left-most subtree with root value items[0] to recurse into.
-
-        Hints:
-
-        To do this recursively, you'll need to recurse on both the tree argument
-        (from self to a subtree) AND on the given items, using the "first" and "rest" idea
-        from RecursiveLists. To access the "rest" of a built-in Python list, you can use
-        list slicing: items[1:len(items)] or simply items[1:], or you can use a recursive helper method
-        that takes an extra "current index" argument to keep track of the next move in the list to add.
 
         Preconditions:
             - not self.is_empty()
@@ -302,13 +312,15 @@ class Tree:
             existing = False
             for subtree in self._subtrees:
                 if subtree._root == items[0] and not existing:  # found an existing path go continue
-                    subtree.insert_sequence(items[1:])
+                    subtree.insert_sequence(items[1:], data)
                     existing = True
 
             if not existing:  # existing subtree not found; create own
                 new_sub = Tree(items[0], [])
+                if len(items) == 1:  # If the last added one insert the data payload too
+                    new_sub._data = data
                 self._subtrees.append(new_sub)
-                new_sub.insert_sequence(items[1:])
+                new_sub.insert_sequence(items[1:], data)
 
     def traverse_path(self, path: list[Any]) -> Optional[Tree]:
         """

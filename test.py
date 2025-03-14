@@ -30,3 +30,4 @@ def extract_opening(tree: Tree, path: list[str])-> Opening | None:
 
 path = ["", 'g4', 'd5', 'Bg2']
 print(extract_opening(tree, path))
+print(tree)

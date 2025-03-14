@@ -15,7 +15,7 @@ def parse_openings(filename: str) -> Optional[list[Opening]]:
             for line in reader:
                 eco = line[0]
                 name = line[1]
-                moves = _clean_moves(line[2])
+                moves = clean_moves(line[2])
                 openings.append(Opening(eco, name, moves))
         
         return openings
@@ -41,15 +41,16 @@ def create_mapping(openings: list[Opening]) -> dict[str, Opening]:
     return mapping
 
 
-def _clean_moves(moves: str) -> list[str]:
+def clean_moves(moves: str) -> list[str]:
     """Given a movelist string, clean it up and return it as a list of moves instead.
 
-    >>> _clean_moves('1. d4 f5 2. c4 Nf6 3. g3 e6 4. Bg2 Be7 5. Nf3 O-O 6. O-O d5')
+    >>> clean_moves('1. d4 f5 2. c4 Nf6 3. g3 e6 4. Bg2 Be7 5. Nf3 O-O 6. O-O d5')
     ['d4', 'f5', 'c4', 'Nf6', 'g3', 'e6', 'Bg2', 'Be7', 'Nf3', 'O-O', 'O-O', 'd5']
     """
-    pattern=r"\d\.\s"
-    clean = sub(pattern, "", moves)
-    return clean.split()
+    # pattern=r"\d\.\s"
+    # clean = sub(pattern, "", moves)
+    # return clean.split()
+    return [move for move in moves.split() if move[-1] != '.']
 
 
 if __name__ == "__main__":
