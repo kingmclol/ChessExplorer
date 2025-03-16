@@ -1,4 +1,5 @@
 .DS_STORE
 /latex-build
 requirements.txt
-/__pycache__
+/data/games/lichess_db_standard_rated_2015-05.pgn.zst
+**/__pycache__
