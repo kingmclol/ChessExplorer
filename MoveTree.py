@@ -26,26 +26,32 @@ class ChessData:
 
     def _calc_data(self, move_sequence: list[str], data: pd.DataFrame) -> None:
         """Calculate the win rate if this move is played for different time controls."""
-        return  # I don't know why pandas sucks bring me back to R
-        print(move_sequence)
+        print(move_sequence)  # Debugging
+
         winrate = {}
         playrate = {}
         tcs = data['time_control'].unique()
+
         for tc in tcs:
-            # This can probably be optimized a bit more by doing filter by time control first
-            # Then two different filtering methods to make it work
+            # Filter by time control first
             filtered_curr = data[(data['time_control'] == tc) &
-                                 (data['moves'].apply(lambda moves: moves[0:len(move_sequence)] == move_sequence))]
+                                 (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
+                                     move_sequence)] == move_sequence))]
 
-            winrate[tc] = (filtered_curr['winner'] == "white").mean()
-            print((filtered_curr['winner'] == "white").mean())
+            # Avoid NaN values
+            winrate[tc] = len(filtered_curr[filtered_curr['winner'] == "white"]) / len(filtered_curr)\
+                if not filtered_curr.empty else 0.0
+            print(f"Winrate for {tc}: {winrate[tc]}")
+
+            # Previous move sequence filtering
             filtered_prev = data[(data['time_control'] == tc) &
-                                 (data['moves'].apply(
-                                     lambda moves: moves[0:len(move_sequence)-1] == move_sequence[0:-1]
-                                 ))]
+                                 (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
+                                     move_sequence) - 1] == move_sequence[:-1]))]
 
-            print(filtered_prev)
-            playrate[tc] = len(filtered_curr)/len(filtered_prev)
+            print(f"Filtered previous size for {tc}: {filtered_prev.shape}")
+
+            # Avoid division by zero
+            playrate[tc] = len(filtered_curr) / len(filtered_prev) if len(filtered_prev) > 0 else 0.0
 
         self.winrate = winrate
         self.playrate = playrate
