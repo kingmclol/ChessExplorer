@@ -106,7 +106,8 @@ class Tree:
     _root: Optional[Any]
     _subtrees: list[Tree]
     _data: Optional[Any]
-    def __init__(self, root: Optional[Any], subtrees: list[Tree]) -> None:
+    _parent: Optional[Tree]
+    def __init__(self, root: Optional[Any], subtrees: list[Tree], parent: Optional[Tree] = None) -> None:
         """Initialize a new Tree with the given root value and subtrees.
 
         If root is None, the tree is empty.
@@ -117,6 +118,7 @@ class Tree:
         self._root = root
         self._subtrees = subtrees
         self._data = None
+        self._parent = parent if parent else self
 
     def is_empty(self) -> bool:
         """Return whether this tree is empty.
@@ -320,7 +322,7 @@ class Tree:
                     existing = True
 
             if not existing:  # existing subtree not found; create own
-                new_sub = Tree(items[0], [])
+                new_sub = Tree(items[0], [],  self)
                 if len(items) == 1:  # If the last added one insert the data payload too
                     new_sub._data = data
                 self._subtrees.append(new_sub)
@@ -373,6 +375,66 @@ class Tree:
         """
         return self._root
     
+
+class Traverser:
+    _root: Tree
+    _path: list[Tree]
+    _current: Tree
+    def __init__(self, root: Tree):
+        self._root = root
+        self._path = []
+        self._current = root
+    
+    def interactive(self) -> None:
+        while True:
+            read = input(f"{self._path_to_str()}: ")
+            self.apply_traverse(read)
+    
+    def apply_traverse(self, command: str) -> None:
+        if command == "":
+            return
+        temp = command.strip().split(maxsplit=1)
+        cmd = temp[0]
+        if len(temp) == 2:
+            param = temp[1]
+        else:
+            param = ""
+
+        if cmd == "ls":
+            for subtree in self._current._subtrees:
+                print(f"{subtree._root} | {subtree._data if subtree._data else None}")
+        elif cmd == "cd":
+            moves = param.split("/")
+            test = self._current
+            test_path = self._path.copy()
+            for move in moves:
+                if move == "..":
+                    test = test._parent
+                    test_path.pop()
+                else:
+                    valid = False
+                    for subtree in test._subtrees:
+                        if subtree._root == move:
+                            test = subtree
+                            valid = True
+                            test_path.append(move)
+                            break
+                    if not valid:
+                        print("Cannot travel there")
+                        return
+            if test:
+                self._current = test
+                self._path = test_path
+        elif cmd == "name":
+            print(self._current._data if self._current._data else "(None)")
+            
+
+
+    def _path_to_str(self) -> str:
+        return "/" + "/".join(self._path)
+        
+
+        
 if __name__ == '__main__':
     import doctest
     doctest.testmod(verbose=True)

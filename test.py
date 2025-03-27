@@ -1,4 +1,4 @@
-from Classes import Tree, Opening
+from Classes import Tree, Opening, Traverser
 from Parser import parse_openings, create_mapping
 
 FILE="a.tsv"

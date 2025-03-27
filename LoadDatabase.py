@@ -1,5 +1,5 @@
 import pandas as pd
-from Classes import Opening, Tree
+from Classes import Opening, Tree, Traverser
 import chess
 from Parser import clean_moves
 import csv
@@ -28,11 +28,11 @@ def create_opening_dataframe(path: str, max_moves: int) -> pd.DataFrame:
             next(reader)  # clear headers
             for row in reader:
                 moves = clean_moves(row[2])
-                if len(moves) <= max_moves:
+                if len(moves) > max_moves:
                     continue  # skip this opening
                 data['eco'].append(row[0])
                 data['name'].append(row[1])
-                
+
                 data['moves'].append(moves)
                 data['num_moves'].append(len(moves))
 
@@ -69,4 +69,6 @@ df = load_chess_games("data/games/dataset.pkl")
 print(df)
 
 
-
+# traverser = Traverser(tree)
+# traverser.interactive()
+#

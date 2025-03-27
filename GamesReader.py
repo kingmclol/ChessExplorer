@@ -1,7 +1,7 @@
 """
 Class to convert PGN chess games into a picked dataframe as output
 E.g., take a lichess chess database
-then in console do 
+then in console do
 zstdcat [games archive dataset] | GamesReader.py
 which creates a dataset.pkl which can be read later into a dataframe for processing
 """
@@ -62,7 +62,6 @@ def _get_timecontrol(tc: str) -> int:
     >>> _get_timecontrol("300+17")
     300
     """
-    print(tc)
     return int(tc.partition("+")[0])
 
 def _get_moves(game: chess.pgn.Game) -> list[str]:
@@ -71,10 +70,10 @@ def _get_moves(game: chess.pgn.Game) -> list[str]:
     for move in game.mainline_moves():
         moves.append(board.san(move))
         board.push(move)
-    
+
     return moves
-        
-    
+
+
 def _get_winner(result: str) -> str:
     """
     Given the result score, return the winner.
