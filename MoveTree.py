@@ -9,16 +9,16 @@ from typing import Optional
 
 import pandas as pd
 
-
+PADDING = 12
 class ChessData:
     """
     A dataclass that stores data about a chess state
     """
     name: Optional[str]
-    winrate: dict[int, float]
+    win_data: dict[int, dict[str, float]]
     playrate: dict[int, float]
+    plays: dict[int, float]
     move_sequence: list[str]
-
     def __init__(self, move_sequence: list[str], data: pd.DataFrame, name: Optional[str] = None):
         self.name = name
         self.move_sequence = move_sequence
@@ -26,10 +26,11 @@ class ChessData:
 
     def _calc_data(self, move_sequence: list[str], data: pd.DataFrame) -> None:
         """Calculate the win rate if this move is played for different time controls."""
-        print(move_sequence)  # Debugging
+        # print(move_sequence)  # Debugging
 
-        winrate = {}
+        win_data = {}
         playrate = {}
+        plays = {}
         tcs = data['time_control'].unique()
 
         for tc in tcs:
@@ -38,27 +39,50 @@ class ChessData:
                                  (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
                                      move_sequence)] == move_sequence))]
 
-            # Avoid NaN values
-            winrate[tc] = len(filtered_curr[filtered_curr['winner'] == "white"]) / len(filtered_curr)\
-                if not filtered_curr.empty else 0.0
-            print(f"Winrate for {tc}: {winrate[tc]}")
+            plays[tc] = len(filtered_curr)
+            win_data[tc] = {}
+            for winner in ["white", "black", "draw"]:
+                # Avoid NaN values
+                win_data[tc][winner] = len(filtered_curr[filtered_curr['winner'] == winner]) / len(filtered_curr)\
+                    if not filtered_curr.empty else 0.0
+            # print(f"Winrate for {tc}: {winrate[tc]}")
 
             # Previous move sequence filtering
             filtered_prev = data[(data['time_control'] == tc) &
                                  (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
                                      move_sequence) - 1] == move_sequence[:-1]))]
 
-            print(f"Filtered previous size for {tc}: {filtered_prev.shape}")
+            # print(f"Filtered previous size for {tc}: {filtered_prev.shape}")
 
             # Avoid division by zero
             playrate[tc] = len(filtered_curr) / len(filtered_prev) if len(filtered_prev) > 0 else 0.0
 
-        self.winrate = winrate
+        self.win_data = win_data
         self.playrate = playrate
+        self.plays = plays
 
-    def __str__(self) -> str:
-        """Return the name of this board state, if it has one"""
-        return self.name if self.name else ""
+    def str(self, tc: int) -> str:
+        """ to string but uses tc """
+        # TODO: make it take the tc in general
+        return f"{self.name if self.name else ""} ({round(self.playrate[180], 2)}%)"
+
+    def output_stats(self, tc: int) -> None:
+        """Print out the stats for this board state, given the time control."""
+        print(f"{self.name if self.name else "Not an opening"}:")
+        print(f"Move sequence: {str(self.move_sequence)}")
+        print(f"Chosen Timecontrol: {tc}")
+        if tc not in self.win_data:
+            print(f"<NO DATA FOR TC {tc} SECONDS>")
+            return
+
+        print(f"{'GAME RESULT':<{PADDING}}{'PERCENT':<{PADDING}}")
+
+        win_dat = self.win_data[tc]
+        for winner in win_dat:
+            print(f"{winner:<{PADDING}}{f"{round(win_dat[winner] * 100, 2)}%":<{PADDING}}")
+
+        print(f"PLAYS: {self.plays[tc]}")
+        print(f"Players chose to play this {round(self.playrate[tc] * 100, 2)}% of the time after the previous move.")
 
 
 class MoveTree:
@@ -117,6 +141,11 @@ class MoveTree:
         path.reverse()  # since its in reverse order
         return path
 
+    def print_stats(self, tc: int) -> None:
+        if not self.data:
+            print("There is no data associated with this board state.")
+        else:
+            print(self.data.output_stats(tc))
     # ======================== added from ex3 or ex2 whatever
     def is_empty(self) -> bool:
         """Return whether this MoveTree is empty"""
@@ -140,7 +169,8 @@ class MoveTree:
         if self.is_empty():
             return ''
         else:
-            str_so_far = '  ' * depth + f'{self.move}' + f'{'' if self.data is None else f" | {self.data}"}' + '\n'
+            # TODO: make it take in any tc
+            str_so_far = '  ' * depth + f'{self.move}' + f'{'' if self.data is None else f" | {self.data.str(180)}"}' + '\n'
             for next_move in self.next_moves:
                 # Note that the 'depth' argument to the recursive call is
                 # modified.

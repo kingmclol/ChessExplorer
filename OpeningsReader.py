@@ -4,13 +4,15 @@ File with methods that involve reading the chess openings
 import csv
 
 
-def get_openings(path: str, max_moves: int) -> dict[tuple[str, ...], str]:
+def get_openings(path: str, max_moves: int = -1) -> dict[tuple[str, ...], str]:
     """
     Create a dataframe of known chess openings, restricted to the max number of moves given from the
     .tsv files located in the given path
 
+    If no max_moves given, there is no limit applied.
+
     Preconditions:
-        - max_moves >= 0
+        - max_moves > 0
     """
     # Load all relevant data from the .tsv files first into a list before converting to dataframe
     mapping = {}
@@ -21,7 +23,7 @@ def get_openings(path: str, max_moves: int) -> dict[tuple[str, ...], str]:
             next(reader)  # clear headers
             for row in reader:
                 moves = _clean_moves(row[2])
-                if len(moves) > max_moves:
+                if max_moves != -1 and len(moves) > max_moves:
                     continue  # skip this opening
                 mapping[tuple(moves)] = row[1]
 

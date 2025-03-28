@@ -1,6 +1,5 @@
 .DS_STORE
 /latex-build
-requirements.txt
 /data/games/lichess_db_standard_rated_2015-05.pgn.zst
 /__pycache__
 /.idea
