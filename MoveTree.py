@@ -13,6 +13,9 @@ PADDING = 12
 class ChessData:
     """
     A dataclass that stores data about a chess state
+
+    # TODO: Make it so data is stored in an actual way (currently it is absolute ugh)
+    # Also probalby is a good idea to rename this.
     """
     name: Optional[str]
     win_data: dict[int, dict[str, float]]
@@ -49,8 +52,8 @@ class ChessData:
 
             # Previous move sequence filtering
             filtered_prev = data[(data['time_control'] == tc) &
-                                 (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
-                                     move_sequence) - 1] == move_sequence[:-1]))]
+                                 (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:max(len(
+                                     move_sequence) - 1, 0)] == move_sequence[:-1]))]
 
             # print(f"Filtered previous size for {tc}: {filtered_prev.shape}")
 
@@ -64,26 +67,34 @@ class ChessData:
     def str(self, tc: int) -> str:
         """ to string but uses tc """
         # TODO: make it take the tc in general
-        return f"{self.name if self.name else ""} ({round(self.playrate[180], 2)}%)"
+        return f"{self.name if self.name else ""} ({round(self.playrate[180] * 100, 2)}%)"
 
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
-        print(f"{self.name if self.name else "Not an opening"}:")
+        print(f"{self.name if self.name else "Not an opening"}")
+        # TODO: Create a better way to represent move_sequence as a string
         print(f"Move sequence: {str(self.move_sequence)}")
         print(f"Chosen Timecontrol: {tc}")
         if tc not in self.win_data:
             print(f"<NO DATA FOR TC {tc} SECONDS>")
             return
 
-        print(f"{'GAME RESULT':<{PADDING}}{'PERCENT':<{PADDING}}")
+        print(f"{'GAME RESULT':>{PADDING}}{'PERCENT':>{PADDING}}")
 
         win_dat = self.win_data[tc]
         for winner in win_dat:
-            print(f"{winner:<{PADDING}}{f"{round(win_dat[winner] * 100, 2)}%":<{PADDING}}")
+            print(f"{winner:>{PADDING}}{f"{round(win_dat[winner] * 100, 2)}%":>{PADDING}}")
 
         print(f"PLAYS: {self.plays[tc]}")
-        print(f"Players chose to play this {round(self.playrate[tc] * 100, 2)}% of the time after the previous move.")
+        if self.move_sequence:  # special case. It doesn't make sense to have a previous move.
+            print(f"Players played this {round(self.playrate[tc] * 100, 2)}% of the time after the previous move.")
 
+    def get_name(self) -> str:
+        """
+        Return whether this seuqence of moves has a name. That is, whether this sequence is a
+        documented opening. Return "(None)" if it is not.
+        """
+        return self.name if self.name else "(None)"
 
 class MoveTree:
     """A Tree of Chess Moves. Legality is not checked."""
@@ -116,6 +127,8 @@ class MoveTree:
                     existing = True
 
             if not existing:  # existing subtree not found; create own
+                # TODO: Make creating the new MoveTree easier somehow(helper function, or constructor of ChessData)
+
                 new_sequence = self.get_path() + [move_sequence[0]]
                 name = openings_database[tuple(new_sequence)] if tuple(new_sequence) in openings_database else None
                 data = ChessData(new_sequence, games_database, name)
@@ -142,6 +155,7 @@ class MoveTree:
         return path
 
     def print_stats(self, tc: int) -> None:
+        # TODO: Might be a good idea to make handling time controls easier instead of always as param
         if not self.data:
             print("There is no data associated with this board state.")
         else:

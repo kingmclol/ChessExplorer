@@ -46,7 +46,8 @@ class Traverser:
 
         if cmd == "ls":
             for subtree in self._current.next_moves:
-                print(f"{subtree.move} | {subtree.data if subtree.data else None}")
+                # TODO: Make it accept generic timecontrol
+                print(f"{subtree.move} | {subtree.data.str(180) if subtree.data else None}")
         elif cmd == "cd":
             moves = param.split("/")
             if moves and moves[0] == "~":
@@ -77,9 +78,9 @@ class Traverser:
                 self._current = test
                 self._path = test_path
         elif cmd == "name":
-            print(self._current.data.str() if self._current.data else "(None)")
+            print(self._current.data.get_name() if self._current.data else "(None)")
         elif cmd == "stats":
-            # temp
+            # TODO: Make another function that handles commands like these instead
             self._current.print_stats(int(param))
 
     def _path_to_str(self) -> str:
