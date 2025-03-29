@@ -3,7 +3,8 @@ Traverser is the class that takes in the MoveTree and allows for user interactio
 
 Commands emulate navigation of a filesystem using the terminal; directories are MoveTrees.
 """
-from MoveTree import MoveTree, percentify
+from MoveTree import MoveTree
+from ChessData import percentify
 from typing import Optional
 
 PADDING_PLAYRATE = 12
