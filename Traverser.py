@@ -115,7 +115,7 @@ class Traverser:
         print("  help  - Display this menu")
         print("  settc - Set the time control")
         print("  timecontrols - Display the time controls available")
-        print("  tree  - Display the move tree")
+        print("  tree  - Display the move tree so far")
 
     def timecontrols(self) -> None:
         """
