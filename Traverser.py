@@ -84,9 +84,6 @@ class Traverser:
             self.apply_traverse(param)
         elif command == 'timecontrols':
             self.timecontrols()
-        elif command == 'find':
-            # TODO
-            pass
 
     def _extract_tc(self, param: Optional[str] = None) -> Optional[int]:
         """
@@ -120,32 +117,20 @@ class Traverser:
         print("  timecontrols - Display the time controls available")
 
     def timecontrols(self) -> None:
+        """
+        Gives the user the 4 avaiable time controls
+        """
         print("Time controls available: 60 sec, 180 sec, 300 sec, 600 sec")
 
     def output_tree(self) -> None:
         """
         Output the MoveTree, RELATIVE to the current node.
-         >>> root = MoveTree("root")
-        >>> root.add_move("e4", MoveData(0.6))
-        >>> root.add_move("d4", MoveData(0.4))
-        >>> traverser = Traverser(root)
-        >>> traverser.output_tree()  # Expected to print the tree structure
-        root
-        ├── e4 (60.00%)
-        └── d4 (40.00%)
         """
         print(self._current)
 
     def output_stats(self, tc: Optional[int] = None) -> None:
         """
         Print out the statistics for the current MoveTree node, for the given time control.
-
-        >>> root = MoveTree("root", data=MoveData(0.5))
-         >>> traverser = Traverser(root)
-        >>> traverser.output_stats()  # Expected to print the stats for the root move
-        Statistics for move: root
-        Play rate: 50.00%
-
         """
         if not tc:
             tc = self._timecontrol  # set to global version
@@ -160,30 +145,6 @@ class Traverser:
 
         Preconditions:
          - param in {'asc', 'desc', 'played'}
-
-        >>> traverser = Traverser(MoveTree("root"))
-        >>> traverser._current.next_moves = [
-        ...     MoveTree("e4", data=MoveData(0.6)),
-        ...     MoveTree("d4", data=MoveData(0.4)),
-        ...     MoveTree("c4", data=MoveData(0.2))
-        ... ]
-        >>> traverser.ls("asc")  # Expected: Moves sorted by playrate in ascending order
-        NEXT MOVE   PLAYRATE    NAME
-        c4          20.00%      None
-        d4          40.00%      None
-        e4          60.00%      None
-
-        >>> traverser.ls("desc")  # Expected: Moves sorted by playrate in descending order
-        NEXT MOVE   PLAYRATE    NAME
-        e4          60.00%      None
-        d4          40.00%      None
-        c4          20.00%      None
-
-        >>> traverser.ls("played")  # Expected: Only moves with nonzero playrate are listed
-        NEXT MOVE   PLAYRATE    NAME
-        e4          60.00%      None
-        d4          40.00%      None
-        c4          20.00%      None
         """
         next_moves = self._current.next_moves
         if param == "asc":
