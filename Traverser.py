@@ -9,7 +9,7 @@ from typing import Optional
 PADDING_PLAYRATE = 12
 PADDING_NEXT_MOVE = 12
 PADDING_NAME = 50
-COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats']
+COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats', 'timecontrols']
 
 
 class Traverser:
@@ -81,6 +81,8 @@ class Traverser:
             print(f"Set global timecontrol to {tc}.")
         elif command == 'cd':
             self.apply_traverse(param)
+        elif command == 'timecontrols':
+            self.timecontrols()
         elif command == 'find':
             # TODO
             pass
@@ -106,8 +108,18 @@ class Traverser:
         """
         Print out help information.
         """
+        print("Note: tc means time control, such as 180 seconds")
+        print("Time controls available: 60 sec, 180 sec, 300 sec, 600 sec")
+        print("Commands:")
+        print("  ls    - List all possible moves from the current position")
+        print("  cd    - Move to the position after a specified move")
+        print("  cd .. - Move back to the previous position")
+        print("  stats - Display winrate and best move calculations")
+        print("  help  - Display this menu")
+        print("  settc - Set the time control")
 
-        pass
+    def timecontrols(self) -> None:
+        print("Time controls available: 60 sec, 180 sec, 300 sec, 600 sec")
 
     def output_tree(self) -> None:
         """
