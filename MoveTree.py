@@ -64,7 +64,7 @@ class ChessData:
     def str(self, tc: int) -> str:
         """ to string but uses tc """
         # TODO: make it take the tc in general
-        return f"{self.name if self.name else ""} ({round(self.playrate[180], 2)}%)"
+        return f"{self.name if self.name else ''} ({round(self.playrate.get(tc, 0) * 100, 2)}%)"
 
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
@@ -91,10 +91,12 @@ class MoveTree:
     parent: MoveTree
     data: Optional[ChessData] = None
     next_moves: list[MoveTree]
+    default_tc: int
 
     def __init__(self, move: str, parent: Optional[MoveTree] = None,
                  next_moves: Optional[list[MoveTree]] = None,
                  data: Optional[ChessData] = None):
+        self._default_tc = default_tc
         self.move = move
         self.parent = parent
         self.next_moves = next_moves if next_moves else []
@@ -147,6 +149,7 @@ class MoveTree:
         else:
             print(self.data.output_stats(tc))
     # ======================== added from ex3 or ex2 whatever
+
     def is_empty(self) -> bool:
         """Return whether this MoveTree is empty"""
         return self.move is None
@@ -159,9 +162,9 @@ class MoveTree:
 
         You may find this method helpful for debugging.
         """
-        return self._str_indented(0).rstrip()
+        return self._str_indented(0, self._default_tc).rstrip()
 
-    def _str_indented(self, depth: int) -> str:
+    def _str_indented(self, depth: int, tc: int = 180) -> str:
         """Return an indented string representation of this tree.
 
         The indentation level is specified by the <depth> parameter.
@@ -169,10 +172,18 @@ class MoveTree:
         if self.is_empty():
             return ''
         else:
-            # TODO: make it take in any tc
-            str_so_far = '  ' * depth + f'{self.move}' + f'{'' if self.data is None else f" | {self.data.str(180)}"}' + '\n'
+            str_so_far = '  ' * depth + f'{self.move}' + f'{"" if self.data is None else f" | {self.data.str(tc)}"}' + '\n'
             for next_move in self.next_moves:
-                # Note that the 'depth' argument to the recursive call is
-                # modified.
-                str_so_far += next_move._str_indented(depth + 1)
+                str_so_far += next_move._str_indented(depth + 1, tc)
             return str_so_far
+
+    def help_menu(self) -> None:
+        """
+        Prints commands after user types 'help'.
+        """
+        print("Commands:")
+        print("  ls    - List all possible moves from the current position")
+        print("  cd    - Move to the position after a specified move")
+        print("  cd .. - Move back to the previous position")
+        print("  stats - Display winrate and best move calculations")
+        print("  help  - Display this menu")
