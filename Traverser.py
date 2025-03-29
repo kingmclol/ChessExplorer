@@ -9,7 +9,7 @@ from typing import Optional
 PADDING_PLAYRATE = 12
 PADDING_NEXT_MOVE = 12
 PADDING_NAME = 50
-COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats', 'mostpopular']
+COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats']
 
 
 class Traverser:
@@ -125,19 +125,43 @@ class Traverser:
 
     def ls(self, param: Optional[str] = None) -> None:
         """
-        List-moves that are one level deeper than current, using global timecontrol
+        List-moves that are one level deeper tha n current, using global timecontrol
 
         Given the param, output in a specific way. If no param given, just output without any
         changes
 
         Preconditions:
          - param in {'asc', 'desc', 'played'}
+
+        >>> traverser = Traverser(MoveTree("root"))
+        >>> traverser._current.next_moves = [
+        ...     MoveTree("e4", data=MoveData(0.6)),
+        ...     MoveTree("d4", data=MoveData(0.4)),
+        ...     MoveTree("c4", data=MoveData(0.2))
+        ... ]
+        >>> traverser.ls("asc")  # Expected: Moves sorted by playrate in ascending order
+        NEXT MOVE   PLAYRATE    NAME
+        c4          20.00%      None
+        d4          40.00%      None
+        e4          60.00%      None
+
+        >>> traverser.ls("desc")  # Expected: Moves sorted by playrate in descending order
+        NEXT MOVE   PLAYRATE    NAME
+        e4          60.00%      None
+        d4          40.00%      None
+        c4          20.00%      None
+
+        >>> traverser.ls("played")  # Expected: Only moves with nonzero playrate are listed
+        NEXT MOVE   PLAYRATE    NAME
+        e4          60.00%      None
+        d4          40.00%      None
+        c4          20.00%      None
         """
         next_moves = self._current.next_moves
         if param == "asc":
-            next_moves = sorted(next_moves, key=lambda move: move.move)
+            next_moves = sorted(next_moves, key=lambda move: move.data.get_playrate(self._timecontrol))
         elif param == "desc":
-            next_moves = sorted(next_moves, key=lambda move: move.move, reverse = True)
+            next_moves = sorted(next_moves, key=lambda move: move.data.get_playrate(self._timecontrol), reverse=True)
         elif param == "played":
             next_moves = [move for move in next_moves if move.data.playrate[self._timecontrol] != 0]
 
@@ -186,6 +210,7 @@ class Traverser:
                 self._path = test_path
 
     def _path_to_str(self) -> str:
+
         return "/" + "/".join(self._path)
 
 
