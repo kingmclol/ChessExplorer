@@ -112,12 +112,27 @@ class Traverser:
     def output_tree(self) -> None:
         """
         Output the MoveTree, RELATIVE to the current node.
+         >>> root = MoveTree("root")
+        >>> root.add_move("e4", MoveData(0.6))
+        >>> root.add_move("d4", MoveData(0.4))
+        >>> traverser = Traverser(root)
+        >>> traverser.output_tree()  # Expected to print the tree structure
+        root
+        ├── e4 (60.00%)
+        └── d4 (40.00%)
         """
         print(self._current)
 
     def output_stats(self, tc: Optional[int] = None) -> None:
         """
         Print out the statistics for the current MoveTree node, for the given time control.
+
+        >>> root = MoveTree("root", data=MoveData(0.5))
+         >>> traverser = Traverser(root)
+        >>> traverser.output_stats()  # Expected to print the stats for the root move
+        Statistics for move: root
+        Play rate: 50.00%
+
         """
         if not tc:
             tc = self._timecontrol  # set to global version
