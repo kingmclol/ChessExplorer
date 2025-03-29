@@ -23,7 +23,8 @@ class ChessData:
     playrate: dict[int, float]
     plays: dict[int, float]
     move_sequence: list[str]
-    def __init__(self, move_sequence: list[str], data: pd.DataFrame, name: Optional[str] = None):
+
+    def __init__(self, move_sequence: list[str], data: pd.DataFrame, name: Optional[str] = None) -> None:
         self.name = name
         self.move_sequence = move_sequence
         self._calc_data(move_sequence, data)
@@ -70,7 +71,6 @@ class ChessData:
     #     # TODO: make it take the tc in general
     #     return f"{self.name if self.name else ''} ({percentify(self.playrate.get(tc, 0), 2)})"
 
-
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
         print(f"{self.name if self.name else "Not an opening"}")
@@ -99,6 +99,9 @@ class ChessData:
         return self.name if self.name else "(None)"
 
     def get_playrate(self, tc: Optional[int]) -> float:
+        """
+        Get the opening's playrate out of every game
+        """
         return self.playrate.get(tc, 0.0)
 
 
@@ -111,7 +114,7 @@ class MoveTree:
 
     def __init__(self, move: str, parent: Optional[MoveTree] = None,
                  next_moves: Optional[list[MoveTree]] = None,
-                 data: Optional[ChessData] = None):
+                 data: Optional[ChessData] = None) -> None:
         self.move = move
         self.parent = parent
         self.next_moves = next_moves if next_moves else []
@@ -161,12 +164,16 @@ class MoveTree:
         return path
 
     def print_stats(self, tc: int) -> None:
+        """
+        prints out the stats for this node, given the time control.
+        """
         # TODO: Might be a good idea to make handling time controls easier instead of always as param
         if not self.data:
             print("There is no data associated with this board state.")
         else:
             print(self.data.output_stats(tc))
-    # ======================== added from ex3 or ex2 whatever
+
+
     def is_empty(self) -> bool:
         """Return whether this MoveTree is empty"""
         return self.move is None
@@ -211,3 +218,17 @@ def percentify(val: float, dp: int) -> str:
     '73.21%'
     """
     return f"{round(val * 100, dp)}%"
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(verbose=True)
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['MoveTree', 'percentify', 'Optional'],
+        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'max-nested-blocks': 4
+    })
