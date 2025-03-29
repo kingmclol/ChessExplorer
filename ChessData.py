@@ -25,7 +25,7 @@ class ChessData:
     plays: dict[int, float]
     move_sequence: list[str]
 
-    def __init__(self, move_sequence: list[str], data: pd.DataFrame, name: Optional[str] = None):
+    def __init__(self, move_sequence: list[str], data: pd.DataFrame, name: Optional[str] = None) -> None:
         self.name = name
         self.move_sequence = move_sequence
         self._calc_data(move_sequence, data)
