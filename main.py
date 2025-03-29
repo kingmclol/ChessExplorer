@@ -8,7 +8,10 @@ from MoveTree import MoveTree, ChessData
 openings_database = get_openings("data/openings", 3)
 print("Done")
 
-games_database = read_pgn(["data/games/lichess_tournament_2025.03.26_G0j0ZKLB_2000-superblitz (1).pgn"])
+games_database = read_pgn(["data/games/lichess_tournament_2025.03.25_tqzGNmOv_daily-bullet.pgn",
+                           "data/games/lichess_tournament_2025.03.25_OvDcYlTU_daily-rapid.pgn",
+                           "data/games/lichess_tournament_2025.03.25_45UeSiXu_daily-blitz.pgn",
+                           "data/games/lichess_tournament_2025.03.24_aByKLmHE_daily-superblitz.pgn"])
 print("Done")
 
 tree = MoveTree("", data=ChessData([], games_database))
@@ -85,6 +88,13 @@ class Traverser:
         elif cmd == "stats":
             # temp
             self._current.print_stats(int(param))
+        elif cmd == "set_tc":
+            self._default_tc = int(param)
+            print(f"Default time control set to {self._default_tc}")
+        elif command == "help":
+            tree.help_menu()
+        else:
+            print("Invalid command. Type 'help' for the list of commands.")
 
     def _path_to_str(self) -> str:
         return "/" + "/".join(self._path)
