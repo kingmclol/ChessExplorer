@@ -109,7 +109,6 @@ class Traverser:
         Print out help information.
         """
         print("Note: tc means time control, such as 180 seconds")
-        print("Time controls available: 60 sec, 180 sec, 300 sec, 600 sec")
         print("Commands:")
         print("  ls    - List all possible moves from the current position")
         print("  cd    - Move to the position after a specified move")
@@ -117,6 +116,7 @@ class Traverser:
         print("  stats - Display winrate and best move calculations")
         print("  help  - Display this menu")
         print("  settc - Set the time control")
+        print("  timecontrols - Display the time controls available")
 
     def timecontrols(self) -> None:
         print("Time controls available: 60 sec, 180 sec, 300 sec, 600 sec")
