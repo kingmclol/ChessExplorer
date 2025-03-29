@@ -3,9 +3,9 @@ Traverser is the class that takes in the MoveTree and allows for user interactio
 
 Commands emulate navigation of a filesystem using the terminal; directories are MoveTrees.
 """
+from typing import Optional
 from MoveTree import MoveTree
 from ChessData import percentify
-from typing import Optional
 
 PADDING_PLAYRATE = 12
 PADDING_NEXT_MOVE = 12
@@ -279,7 +279,6 @@ def validate_command(cmd: str) -> bool:
 
 
 if __name__ == '__main__':
-    pass
     import doctest
     doctest.testmod(verbose=True)
     import python_ta
