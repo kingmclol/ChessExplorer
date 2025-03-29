@@ -9,7 +9,7 @@ from typing import Optional
 PADDING_PLAYRATE = 12
 PADDING_NEXT_MOVE = 12
 PADDING_NAME = 50
-COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats']
+COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats', 'mostpopular']
 
 
 class Traverser:
@@ -106,7 +106,7 @@ class Traverser:
         """
         Print out help information.
         """
-        # TODO
+
         pass
 
     def output_tree(self) -> None:
@@ -135,11 +135,9 @@ class Traverser:
         """
         next_moves = self._current.next_moves
         if param == "asc":
-            pass
-            # TODO
+            next_moves = sorted(next_moves, key=lambda move: move.move)
         elif param == "desc":
-            pass
-            # TODO
+            next_moves = sorted(next_moves, key=lambda move: move.move, reverse = True)
         elif param == "played":
             next_moves = [move for move in next_moves if move.data.playrate[self._timecontrol] != 0]
 
