@@ -10,6 +10,7 @@ from typing import Optional
 import pandas as pd
 
 PADDING = 12
+# TODO: Move this into a new file
 class ChessData:
     """
     A dataclass that stores data about a chess state
@@ -64,10 +65,11 @@ class ChessData:
         self.playrate = playrate
         self.plays = plays
 
-    def str(self, tc: int) -> str:
-        """ to string but uses tc """
-        # TODO: make it take the tc in general
-        return f"{self.name if self.name else ''} ({round(self.playrate.get(tc, 0) * 100, 2)}%)"
+    # def str(self, tc: int) -> str:
+    #     """ to string but uses tc """
+    #     # TODO: make it take the tc in general
+    #     return f"{self.name if self.name else ''} ({percentify(self.playrate.get(tc, 0), 2)})"
+
 
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
@@ -83,11 +85,11 @@ class ChessData:
 
         win_dat = self.win_data[tc]
         for winner in win_dat:
-            print(f"{winner:>{PADDING}}{f"{round(win_dat[winner] * 100, 2)}%":>{PADDING}}")
+            print(f"{winner:>{PADDING}}{f"{percentify(win_dat[winner], 2)}":>{PADDING}}")
 
         print(f"PLAYS: {self.plays[tc]}")
         if self.move_sequence:  # special case. It doesn't make sense to have a previous move.
-            print(f"Players played this {round(self.playrate[tc] * 100, 2)}% of the time after the previous move.")
+            print(f"Players played this {percentify(self.playrate[tc], 2)} of the time after the previous move.")
 
     def get_name(self) -> str:
         """
@@ -95,6 +97,10 @@ class ChessData:
         documented opening. Return "(None)" if it is not.
         """
         return self.name if self.name else "(None)"
+
+    def get_playrate(self, tc: Optional[int]) -> float:
+        return self.playrate.get(tc, 0.0)
+
 
 class MoveTree:
     """A Tree of Chess Moves. Legality is not checked."""
@@ -183,7 +189,25 @@ class MoveTree:
         if self.is_empty():
             return ''
         else:
-            str_so_far = '  ' * depth + f'{self.move}' + f'{"" if self.data is None else f" | {self.data.str(tc)}"}' + '\n'
+            if self.move == '':
+                str_so_far = '(Root)\n'  # Don't want to print out the true root.
+            else:
+                str_so_far = ('    ' * depth + '╚══ ' + f'{self.move}')
+                if self.data and self.data.name:
+                    str_so_far += ' | ' + self.data.get_name()
+
+                str_so_far += '\n'
+
             for next_move in self.next_moves:
                 str_so_far += next_move._str_indented(depth + 1, tc)
             return str_so_far
+
+
+def percentify(val: float, dp: int) -> str:
+    """
+    Return the value as a string percentange, rounded to dp decimal points.
+
+    >>> percentify(0.7321, 2)
+    '73.21%'
+    """
+    return f"{round(val * 100, dp)}%"
