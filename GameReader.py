@@ -69,7 +69,7 @@ def _get_winner(result: str) -> str:
     Given the result score, return the winner.
 
     >>> _get_winner("1-0")
-    "white"
+    'white'
     """
     if result == "1-0":
         return "white"
@@ -79,3 +79,17 @@ def _get_winner(result: str) -> str:
         return "draw"
     else:
         return "N/A"
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(verbose=True)
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['MoveTree', 'percentify', 'Optional'],
+        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'max-nested-blocks': 4
+    })
