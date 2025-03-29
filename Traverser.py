@@ -29,7 +29,7 @@ class Traverser:
     _current: MoveTree
     _timecontrol: Optional[int] = None
 
-    def __init__(self, home: MoveTree, default_tc: Optional[int] = None):
+    def __init__(self, home: MoveTree, default_tc: Optional[int] = None) -> None:
         """
         Create and bind a Traverser's home node to the given MoveTree.
 
@@ -280,14 +280,14 @@ def validate_command(cmd: str) -> bool:
 
 if __name__ == '__main__':
     pass
-    # import doctest
-    # doctest.testmod(verbose=True)
-    # import python_ta
-    #
-    # python_ta.check_all(config={
-    #     'max-line-length': 120,
-    #     'disable': ['E1136', 'W0221'],
-    #     'extra-imports': ['MoveTree', 'percentify', 'Optional'],
-    #     'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
-    #     'max-nested-blocks': 4
-    # })
+    import doctest
+    doctest.testmod(verbose=True)
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['MoveTree', 'percentify', 'Optional', 'ChessData'],
+        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'max-nested-blocks': 4
+    })
