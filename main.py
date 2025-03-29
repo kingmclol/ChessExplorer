@@ -26,14 +26,18 @@ print(games_database)
 
 
 class Traverser:
+    """
+
+    """
     _home: MoveTree
     _path: list[str]
     _current: MoveTree
 
-    def __init__(self, home: MoveTree):
+    def __init__(self, home: MoveTree, default_tc: int = 180):
         self._home = home
         self._path = home.get_path()
         self._current = home
+        self._default_tc = default_tc
 
     def interactive(self) -> None:
         while True:
@@ -84,7 +88,7 @@ class Traverser:
                 self._current = test
                 self._path = test_path
         elif cmd == "name":
-            print(self._current.data.get_name() if self._current.data else "(None)")
+            print(self._current.data.str(self._default_tc) if self._current.data else "(None)")
         elif cmd == "stats":
             # TODO: Make another function that handles commands like these instead
             self._current.print_stats(int(param))

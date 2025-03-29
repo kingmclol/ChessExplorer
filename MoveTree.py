@@ -67,7 +67,7 @@ class ChessData:
     def str(self, tc: int) -> str:
         """ to string but uses tc """
         # TODO: make it take the tc in general
-        return f"{self.name if self.name else ""} ({round(self.playrate[180] * 100, 2)}%)"
+        return f"{self.name if self.name else ''} ({round(self.playrate.get(tc, 0) * 100, 2)}%)"
 
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
@@ -175,7 +175,7 @@ class MoveTree:
         """
         return self._str_indented(0).rstrip()
 
-    def _str_indented(self, depth: int) -> str:
+    def _str_indented(self, depth: int, tc: int = 180) -> str:
         """Return an indented string representation of this tree.
 
         The indentation level is specified by the <depth> parameter.
@@ -183,10 +183,7 @@ class MoveTree:
         if self.is_empty():
             return ''
         else:
-            # TODO: make it take in any tc
-            str_so_far = '  ' * depth + f'{self.move}' + f'{'' if self.data is None else f" | {self.data.str(180)}"}' + '\n'
+            str_so_far = '  ' * depth + f'{self.move}' + f'{"" if self.data is None else f" | {self.data.str(tc)}"}' + '\n'
             for next_move in self.next_moves:
-                # Note that the 'depth' argument to the recursive call is
-                # modified.
-                str_so_far += next_move._str_indented(depth + 1)
+                str_so_far += next_move._str_indented(depth + 1, tc)
             return str_so_far
