@@ -116,3 +116,16 @@ def percentify(val: float, dp: int) -> str:
     '73.21%'
     """
     return f"{round(val * 100, dp)}%"
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod(verbose=True)
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['MoveTree', 'percentify', 'Optional', 'ChessData', 'pandas'],
+        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'max-nested-blocks': 4
+    })
