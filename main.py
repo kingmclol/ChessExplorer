@@ -3,7 +3,8 @@ Stuff.
 """
 from OpeningsReader import get_openings
 from GameReader import read_pgn
-from MoveTree import MoveTree, ChessData
+from MoveTree import MoveTree
+from ChessData import ChessData
 from Traverser import Traverser
 
 openings_database = get_openings("data/openings", 3)
