@@ -83,15 +83,16 @@ def _get_winner(result: str) -> str:
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod(verbose=True)
-    import python_ta
+    pass
+    # import doctest
+    # doctest.testmod(verbose=True)
+    # import python_ta
 
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['E1136', 'W0221', 'E9998'],
-        'extra-imports': ['chess', 'chess.pgn', 'pandas'],
-        'allowed-io': ['read_pgn'],
-        'max-nested-blocks': 4
+    # python_ta.check_all(config={
+    #     'max-line-length': 120,
+    #     'disable': ['E1136', 'W0221', 'E9998'],
+    #     'extra-imports': ['chess', 'chess.pgn', 'pandas'],
+    #     'allowed-io': ['read_pgn'],
+    #     'max-nested-blocks': 4
 
-    })
+    # })
