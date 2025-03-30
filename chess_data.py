@@ -13,11 +13,7 @@ PADDING = 12
 
 class ChessData:
     """
-    A dataclass that stores data about a chess state
-
-    # TODO: Make it so data is stored in an actual way (currently it is absolute ugh)
-    # Also probalby is a good idea to rename this.
-
+    A class that stores data about a chess state
     """
     name: Optional[str]
     win_data: dict[int, dict[str, float]]
@@ -67,10 +63,6 @@ class ChessData:
         self.playrate = playrate
         self.plays = plays
 
-    # def str(self, tc: int) -> str:
-    #     """ to string but uses tc """
-    #     return f"{self.name if self.name else ''} ({percentify(self.playrate.get(tc, 0), 2)})"
-
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
         print(f"{self.name if self.name else "Not an opening"}")
@@ -99,11 +91,26 @@ class ChessData:
 
     def get_playrate(self, tc: Optional[int]) -> float:
         """
-
-        :param tc:
-        :return:
+        Return the play rate (% of games that played this after the last move) for the given timecontrol.
+        Return 0.0 if no data.
         """
         return self.playrate.get(tc, 0.0)
+
+    def get_winrate(self, winner: str, tc: int) -> float:
+        """
+        Return the win rate for the winner (yes, draw is a player but yeah) for the given
+        timecontorl.
+
+        Return 0.0 if no data for the timecontrol.
+
+        Preconditions:
+        - winner in {'black', 'white', 'draw'}
+        """
+        data = self.win_data.get(tc, None)
+        if not data:
+            return 0.0
+        else:
+            return data.get(winner, 0.0)
 
 
 def percentify(val: float, dp: int) -> str:

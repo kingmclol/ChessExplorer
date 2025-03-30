@@ -7,7 +7,7 @@ from typing import Optional
 from move_tree import MoveTree
 from chess_data import percentify
 
-PADDING_PLAYRATE = 12
+PADDING_RATES = 12
 PADDING_NEXT_MOVE = 12
 PADDING_NAME = 50
 PADDING_COMMAND = 25
@@ -24,7 +24,7 @@ class Traverser:
     # - _home: The "home directory". That is, the default MoveTree Node
     # - _current: The MoveTree node that the traverser currently is in
     # - _path: The current path from the true root to _current
-    # - _timecontrol: The current timecontrol set for this MoveTree. None for all games
+    # - _timecontrol: The current timecontrol set for this MoveTree.
     _home: MoveTree
     _path: list[str]
     _current: MoveTree
@@ -109,7 +109,8 @@ class Traverser:
         """
         print("Note: tc means time control (game duration in seconds). [] is optional parameter. () is required.")
         print("Commands:")
-        print(f"  {'ls [asc|desc|played]':<{PADDING_COMMAND}}- List common moves from the current position")
+        print(f"  {'ls [asc|desc|played]':<{PADDING_COMMAND}}- List common moves from the current position. "
+              f"Optional filters based on playrate.")
         print(f"  {'cd (move)':<{PADDING_COMMAND}}- Move to the position after a specified move")
         print(f"  {'cd ..':<{PADDING_COMMAND}}- Move back to the previous position")
         print(f"  {'stats [tc]':<{PADDING_COMMAND}}- Display winrate and best move calculations")
@@ -167,11 +168,19 @@ class Traverser:
             return
         if not tc:
             tc = self._timecontrol
-        print(f"{'NEXT MOVE':<{PADDING_NEXT_MOVE}}{'PLAYRATE':<{PADDING_PLAYRATE}}{'NAME':<{PADDING_NAME}}")
+        print(f"{'NEXT MOVE':<{PADDING_NEXT_MOVE}}"
+              f"{'PLAYRATE':<{PADDING_RATES}}"
+              f"{'WHITE WIN':<{PADDING_RATES}}"
+              f"{'BLACK WIN':<{PADDING_RATES}}"
+              f"{'DRAW':<{PADDING_RATES}}"
+              f"{'NAME':<{PADDING_NAME}}")
 
         for move in moves:
             print(f"{move.move:<{PADDING_NEXT_MOVE}}"
-                  f"{percentify(move.data.get_playrate(tc), 2):<{PADDING_PLAYRATE}}"
+                  f"{percentify(move.data.get_playrate(tc), 2):<{PADDING_RATES}}"
+                  f"{percentify(move.data.get_winrate("white", tc), 2):<{PADDING_RATES}}"
+                  f"{percentify(move.data.get_winrate("black", tc), 2):<{PADDING_RATES}}"
+                  f"{percentify(move.data.get_winrate("draw", tc), 2):<{PADDING_RATES}}"
                   f"{move.data.get_name():<{PADDING_NAME}}")
 
     def apply_traverse(self, param: str) -> None:

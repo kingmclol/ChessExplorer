@@ -1,22 +1,20 @@
 """
-File with methods that involve reading the chess openings
+File with methods that involve reading the chess openings .tsv files.
 """
 import csv
 
 
 def get_openings(path: str, max_moves: int = -1) -> dict[tuple[str, ...], str]:
     """
-    Create a dataframe of known chess openings, restricted to the max number of moves given from the
-    .tsv files located in the given path
+    Return a dictionary mapping betwee TUPLES of moves to the name of the opening,
+    restricted to the max number of moves given from the ECO .tsv files located in the given PATH (directory)
+    a.tsv, b.tsv, etc.
 
     If no max_moves given, there is no limit applied.
-
-    Preconditions:
-        - max_moves > 0
     """
-    # Load all relevant data from the .tsv files first into a list before converting to dataframe
+    # Load all relevant data from the .tsv files
     mapping = {}
-    for letter in "abcde":
+    for letter in "abcde":  # quick way to read from each file
         filepath = f"{path}/{letter}.tsv"
         with open(filepath) as file:
             reader = csv.reader(file, delimiter="\t")

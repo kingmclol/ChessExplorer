@@ -1,10 +1,11 @@
 """
-Functions to read a .pgn file.
+Functions to read a .pgn file, and to convert its main data to a pandas dataframe
 """
 import chess
 import chess.pgn
 import pandas as pd
 
+# The data we will actually collect
 HEADERS = ['elo_white', 'elo_black', 'opening', 'time_control', 'winner', 'termination', 'moves']
 
 

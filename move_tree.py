@@ -79,6 +79,7 @@ class MoveTree:
         """Return whether this MoveTree is empty"""
         return self.move is None
 
+    # These following functions are modified from exercise 2 by CSC111 teaching team
     def __str__(self) -> str:
         """Return a string representation of this tree.
 
