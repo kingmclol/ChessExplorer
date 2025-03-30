@@ -41,15 +41,6 @@ class Traverser:
         self._current = home
         self._timecontrol = default_tc
 
-    def start(self) -> None:
-        """
-        Welcome the user to the chess opening explorer. 
-        """
-        print("\n=== Welcome to the Chess Opening Explorer ===")
-        print("You can navigate through chess openings, view statistics, and explore move trees under different time controls.\n")
-        print("Type 'help' to view a list of available commands.\n")
-        print("Starting Traverser...\n")
-        
     def interactive(self) -> None:
         """
         Start the interactivitiy of the Traverser, allowing for user input to navigate through the
@@ -121,7 +112,7 @@ class Traverser:
         print("  cd    - Move to the position after a specified move")
         print("  cd .. - Move back to the previous position")
         print("  stats - Display winrate and best move calculations")
-        print("  help  - Display this menu")
+        print("  help  - Display the help menu")
         print("  settc - Set the time control")
         print("  timecontrols - Display the time controls available")
         print("  tree  - Display the move tree so far")
