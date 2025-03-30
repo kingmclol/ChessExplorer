@@ -266,8 +266,10 @@ if __name__ == '__main__':
                        'Traverser.output_tree',
                        'Traverser.output_help',
                        'Traverser.output_stats',
-                       'Traverser.ls'
-                       'Traverser.apply_traverse'
-                       'Traverser.handle_input'],
+                       'Traverser.ls',
+                       'Traverser.apply_traverse',
+                       'Traverser.handle_input',
+                       'Traverser.timecontrols',
+                       'Traverser.interactive'],
         'max-nested-blocks': 4
     })

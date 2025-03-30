@@ -99,9 +99,9 @@ class MoveTree:
             return ''
         else:
             if self.move == '':
-                str_so_far = '(Root)\n'  # Don't want to print out the true root.
+                str_so_far = '(Root)\n'  # Don't want to print out the true root normally; handle differently
             else:
-                str_so_far = ('    ' * depth + '╚══ ' + f'{self.move}')
+                str_so_far = '    ' * depth + '╚══ ' + f'{self.move}'
                 if self.data and self.data.name:
                     str_so_far += ' | ' + self.data.get_name()
 
