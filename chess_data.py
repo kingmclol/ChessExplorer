@@ -69,13 +69,11 @@ class ChessData:
 
     # def str(self, tc: int) -> str:
     #     """ to string but uses tc """
-    #     # TODO: make it take the tc in general
     #     return f"{self.name if self.name else ''} ({percentify(self.playrate.get(tc, 0), 2)})"
 
     def output_stats(self, tc: int) -> None:
         """Print out the stats for this board state, given the time control."""
         print(f"{self.name if self.name else "Not an opening"}")
-        # TODO: Create a better way to represent move_sequence as a string
         print(f"Move sequence: {str(self.move_sequence)}")
         print(f"Chosen Timecontrol: {tc}")
         if tc not in self.win_data:
@@ -116,6 +114,7 @@ def percentify(val: float, dp: int) -> str:
     '73.21%'
     """
     return f"{round(val * 100, dp)}%"
+
 
 if __name__ == '__main__':
     import doctest
