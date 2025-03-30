@@ -145,6 +145,6 @@ if __name__ == '__main__':
                           'Traverser',
                           'read_pgn',
                           'game_reader'],
-        'allowed-io': ['select_dataset', 'run'],
+        'allowed-io': ['ChessExplorerSimulation.run', 'ChessExplorerSimulation._select_dataset'],
         'max-nested-blocks': 4
     })
