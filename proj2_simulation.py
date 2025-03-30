@@ -141,7 +141,9 @@ if __name__ == '__main__':
                           'openings_reader',
                           'Optional',
                           'chess_data',
-                          'traverser'
+                          'traverser',
+                          'Traverser',
+                          'read_pgn',
                           'game_reader'],
         'allowed-io': ['select_dataset', 'run'],
         'max-nested-blocks': 4
