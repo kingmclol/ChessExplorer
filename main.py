@@ -22,10 +22,6 @@ tree = MoveTree("", data=ChessData([], games_database))
 for move_sequence in openings_database:
     tree.insert_sequence(list(move_sequence), games_database, openings_database)
 
-print("\n=== Welcome to the Chess Opening Explorer ===")
-print("You can navigate through chess openings, view statistics, and explore move trees under different time controls.\n")
-print("Type 'help' to view a list of available commands.\n")
-print("Starting Traverser...\n")
-
 traverser = Traverser(tree, 180)
+traverser.start()
 traverser.interactive()
