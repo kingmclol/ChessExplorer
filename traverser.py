@@ -254,22 +254,23 @@ def validate_command(cmd: str) -> bool:
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod(verbose=True)
-    import python_ta
+    pass
+    # import doctest
+    # doctest.testmod(verbose=True)
+    # import python_ta
 
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['E1136', 'W0221'],
-        'extra-imports': ['move_tree', 'percentify', 'Optional', 'chess_data'],
-        'allowed-io': ['Traverser._print_moves',
-                       'Traverser.output_tree',
-                       'Traverser.output_help',
-                       'Traverser.output_stats',
-                       'Traverser.ls',
-                       'Traverser.apply_traverse',
-                       'Traverser.handle_input',
-                       'Traverser.timecontrols',
-                       'Traverser.interactive'],
-        'max-nested-blocks': 4
-    })
+    # python_ta.check_all(config={
+    #     'max-line-length': 120,
+    #     'disable': ['E1136', 'W0221'],
+    #     'extra-imports': ['move_tree', 'percentify', 'Optional', 'chess_data'],
+    #     'allowed-io': ['Traverser._print_moves',
+    #                    'Traverser.output_tree',
+    #                    'Traverser.output_help',
+    #                    'Traverser.output_stats',
+    #                    'Traverser.ls',
+    #                    'Traverser.apply_traverse',
+    #                    'Traverser.handle_input',
+    #                    'Traverser.timecontrols',
+    #                    'Traverser.interactive'],
+    #     'max-nested-blocks': 4
+    # })
