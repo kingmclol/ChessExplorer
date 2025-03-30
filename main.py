@@ -37,56 +37,74 @@ def start() -> None:
     """
     print("\n=== Welcome to the Chess Opening Explorer ===")
     print(
-        "You can navigate through chess openings, view statistics, and explore move trees under different time controls.\n")
+        "You can navigate through chess openings, view statistics, "
+        "and explore move trees under different time controls.\n")
     print("Type 'help' to view a list of available commands.\n")
     print("Starting Traverser...\n")
 
 
-def select_dataset() -> list[str]:
+def select_dataset() -> tuple[list[str], int]:
     """
     Select the time control of the games that will be used in the opening explorer.
+    Also, return the timecontrol of the chosen dataset
     """
     print("Select dataset to load:")
-    print("1. All Games")
-    print("2. Blitz Only")
-    print("3. Bullet Only")
-    print("4. Rapid Only")
+    print("1. All Games (60s, 180s, 300s, 600s)")
+    print("2. Blitz Only (180s, 300s)")
+    print("3. Bullet Only (60s)")
+    print("4. Rapid Only (600s)")
     choice = input("Enter your choice (1-4): ")
 
     if choice == "1":
-        return ALL_GAMES
+        return ALL_GAMES, 180
     elif choice == "2":
-        return BLITZ_ONLY
+        return BLITZ_ONLY, 180
     elif choice == "3":
-        return BULLET_ONLY
+        return BULLET_ONLY, 60
     elif choice == "4":
-        return RAPID_ONLY
+        return RAPID_ONLY, 600
     else:
         print("Invalid choice. Loading all games by default.")
-        return ALL_GAMES
+        return ALL_GAMES, 180
 
 
 def max_moves() -> int:
     """
     Return max moves the user wants to use from 1-5
-    :return:
     """
-    choice = int(input("Enter maximum number of opening moves from 1-5: "))
-    if 1 <= choice <= 5:
-        return choice
-    else:
-        print("Please enter a number between 1 and 5.")
+    while True:  # literally can't bother fixing your stuff
+        try:
+            choice = int(input("Enter maximum number of opening moves from 1-5: "))
+            if 1 <= choice <= 5:
+                return choice
+            else:
+                print("Please enter a number between 1 and 5.")
+        except ValueError:
+            print("Please enter a number between 1 and 5.")
+        except TypeError:
+            print("Please enter a number between 1 and 5.")
 
 
-start()
-openings_database = get_openings("data/openings", max_moves())
 
-games_database = read_pgn(select_dataset())
 
-tree = MoveTree("", data=ChessData([], games_database))
-for move_sequence in openings_database:
-    tree.insert_sequence(list(move_sequence), games_database, openings_database)
+if __name__ == '__main__':
+    start()
+    moves = max_moves()
+    print("Loading openings...")
+    openings_database = get_openings("data/openings", moves)
+    print("Finished loading openings")
+    files, tc = select_dataset()
+    print("Loading games...")
+    games_database = read_pgn(files)
+    print("Finished loading games.")
 
-traverser = Traverser(tree, 180)
-traverser.output_help()
-traverser.interactive()
+    print("Building tree...")
+    tree = MoveTree("", data=ChessData([], games_database))
+
+    for move_sequence in openings_database:
+        tree.insert_sequence(list(move_sequence), games_database, openings_database)
+
+    print("Finished building tree.")
+    traverser = Traverser(tree, tc)
+    traverser.output_help()
+    traverser.interactive()

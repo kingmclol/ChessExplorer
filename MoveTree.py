@@ -41,8 +41,6 @@ class MoveTree:
                     existing = True
 
             if not existing:  # existing subtree not found; create own
-                # TODO: Make creating the new MoveTree easier somehow(helper function, or constructor of ChessData)
-
                 new_sequence = self.get_path() + [move_sequence[0]]
                 name = openings_database[tuple(new_sequence)] if tuple(new_sequence) in openings_database else None
                 data = ChessData(new_sequence, games_database, name)
@@ -72,12 +70,10 @@ class MoveTree:
         """
         prints out the stats for this node, given the time control.
         """
-        # TODO: Might be a good idea to make handling time controls easier instead of always as param
         if not self.data:
             print("There is no data associated with this board state.")
         else:
-            print(self.data.output_stats(tc))
-
+            self.data.output_stats(tc)
 
     def is_empty(self) -> bool:
         """Return whether this MoveTree is empty"""

@@ -10,6 +10,7 @@ from ChessData import percentify
 PADDING_PLAYRATE = 12
 PADDING_NEXT_MOVE = 12
 PADDING_NAME = 50
+PADDING_COMMAND = 25
 COMMANDS = ['ls', 'cd', 'tree', 'info', 'settc', 'help', 'find', 'stats', 'timecontrols']
 
 
@@ -106,16 +107,16 @@ class Traverser:
         """
         Print out help information.
         """
-        print("Note: tc means time control, such as 180 seconds")
+        print("Note: tc means time control (game duration in seconds). [] is optional parameter. () is required.")
         print("Commands:")
-        print("  ls    - List all possible moves from the current position")
-        print("  cd    - Move to the position after a specified move")
-        print("  cd .. - Move back to the previous position")
-        print("  stats - Display winrate and best move calculations")
-        print("  help  - Display the help menu")
-        print("  settc - Set the time control")
-        print("  timecontrols - Display the time controls available")
-        print("  tree  - Display the move tree so far")
+        print(f"  {'ls [asc|desc|played]':<{PADDING_COMMAND}}- List common moves from the current position")
+        print(f"  {'cd (move)':<{PADDING_COMMAND}}- Move to the position after a specified move")
+        print(f"  {'cd ..':<{PADDING_COMMAND}}- Move back to the previous position")
+        print(f"  {'stats [tc]':<{PADDING_COMMAND}}- Display winrate and best move calculations")
+        print(f"  {'help':<{PADDING_COMMAND}}- Display the help menu")
+        print(f"  {'settc (tc)':<{PADDING_COMMAND}}- Set the global time control")
+        print(f"  {'timecontrols':<{PADDING_COMMAND}}- Display the time controls available")
+        print(f"  {'tree':<{PADDING_COMMAND}}- Display the move tree constructed")
 
     def timecontrols(self) -> None:
         """
@@ -161,9 +162,13 @@ class Traverser:
         """
         Print out the moves in a pretty formatted manner. If not given any tc, use default.
         """
+        if not moves:
+            print("There's no more moves to list...")
+            return
         if not tc:
             tc = self._timecontrol
         print(f"{'NEXT MOVE':<{PADDING_NEXT_MOVE}}{'PLAYRATE':<{PADDING_PLAYRATE}}{'NAME':<{PADDING_NAME}}")
+
         for move in moves:
             print(f"{move.move:<{PADDING_NEXT_MOVE}}"
                   f"{percentify(move.data.get_playrate(tc), 2):<{PADDING_PLAYRATE}}"
@@ -249,6 +254,6 @@ if __name__ == '__main__':
         'max-line-length': 120,
         'disable': ['E1136', 'W0221'],
         'extra-imports': ['MoveTree', 'percentify', 'Optional', 'ChessData'],
-        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],
         'max-nested-blocks': 4
     })
