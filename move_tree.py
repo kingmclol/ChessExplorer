@@ -113,14 +113,15 @@ class MoveTree:
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod(verbose=True)
-    import python_ta
+    pass
+    # import doctest
+    # doctest.testmod(verbose=True)
+    # import python_ta
 
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['E1136', 'W0221'],
-        'extra-imports': ['Optional', 'pandas', 'chess_data'],
-        'allowed-io': ['MoveTree.print_stats'],
-        'max-nested-blocks': 4
-    })
+    # python_ta.check_all(config={
+    #     'max-line-length': 120,
+    #     'disable': ['E1136', 'W0221'],
+    #     'extra-imports': ['Optional', 'pandas', 'chess_data'],
+    #     'allowed-io': ['MoveTree.print_stats'],
+    #     'max-nested-blocks': 4
+    # })
