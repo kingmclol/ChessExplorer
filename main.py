@@ -83,7 +83,7 @@ def max_moves() -> int:
             print("Please enter a number between 1 and 5.")
         except TypeError:
             print("Please enter a number between 1 and 5.")
-
+    return 3 # Default value of moves
 
 if __name__ == '__main__':
     # Comment out later.
@@ -98,7 +98,7 @@ if __name__ == '__main__':
         'extra-imports': ['move_tree',
                           'chess_data',
                           'traverser',
-                          'openings_reader',  # Idk how to make it allow for these imports.
+                          'openings_reader',
                           'game_reader'],
         'allowed-io': ['select_dataset', 'start', 'max_moves'],
         'max-nested-blocks': 4
