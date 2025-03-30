@@ -37,8 +37,8 @@ class ChessData:
 
         for tc in tcs:
             # Filter by time control first
-            filtered_curr = data[(data['time_control'] == tc) &
-                                 (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
+            filtered_curr = data[(data['time_control'] == tc)
+                                 & (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:len(
                                      move_sequence)] == move_sequence))]
 
             plays[tc] = len(filtered_curr)
@@ -50,8 +50,8 @@ class ChessData:
             # print(f"Winrate for {tc}: {winrate[tc]}")
 
             # Previous move sequence filtering
-            filtered_prev = data[(data['time_control'] == tc) &
-                                 (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:max(len(
+            filtered_prev = data[(data['time_control'] == tc)
+                                 & (data['moves'].apply(lambda moves: isinstance(moves, list) and moves[:max(len(
                                      move_sequence) - 1, 0)] == move_sequence[:-1]))]
 
             # print(f"Filtered previous size for {tc}: {filtered_prev.shape}")
