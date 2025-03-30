@@ -98,7 +98,7 @@ if __name__ == '__main__':
         'extra-imports': ['move_tree',
                           'chess_data',
                           'traverser',
-                          'openings_reader' # Idk how to make it allow for these imports.
+                          'openings_reader',  # Idk how to make it allow for these imports.
                           'game_reader'],
         'allowed-io': ['select_dataset', 'start', 'max_moves'],
         'max-nested-blocks': 4
