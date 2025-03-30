@@ -82,26 +82,25 @@ def max_moves() -> int:
             print("Please enter a number between 1 and 5.")
             choice = None
     return choice
-    
+
 
 if __name__ == '__main__':
-    # Comment out later.
-    import doctest
-
-    doctest.testmod(verbose=True)
-    import python_ta
-
-    python_ta.check_all(config={
-        'max-line-length': 120,
-        'disable': ['E1136', 'W0221'],
-        'extra-imports': ['move_tree',
-                          'chess_data',
-                          'traverser',
-                          'openings_reader',
-                          'game_reader'],
-        'allowed-io': ['select_dataset', 'start', 'max_moves'],
-        'max-nested-blocks': 4
-    })
+    # import doctest
+    #
+    # doctest.testmod(verbose=True)
+    # import python_ta
+    #
+    # python_ta.check_all(config={
+    #     'max-line-length': 120,
+    #     'disable': ['E1136', 'W0221'],
+    #     'extra-imports': ['move_tree',
+    #                       'chess_data',
+    #                       'traverser',
+    #                       'openings_reader',
+    #                       'game_reader'],
+    #     'allowed-io': ['select_dataset', 'start', 'max_moves'],
+    #     'max-nested-blocks': 4
+    # })
 
     start()
     moves = max_moves()
