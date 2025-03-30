@@ -8,11 +8,11 @@ from __future__ import annotations
 from typing import Optional
 from dataclasses import dataclass
 
-from Traverser import Traverser
-from MoveTree import MoveTree
-from ChessData import ChessData
-from GameReader import read_pgn
-from OpeningsReader import get_openings
+from traverser import Traverser
+from move_tree import MoveTree
+from chess_data import ChessData
+from game_reader import read_pgn
+from openings_reader import get_openings
 
 
 ALL_GAMES = [
@@ -129,9 +129,20 @@ if __name__ == '__main__':
     sim = ChessExplorerSimulation(simulation_config)
     sim.run()
 
+    import doctest
+
+    doctest.testmod(verbose=True)
     import python_ta
 
     python_ta.check_all(config={
         'max-line-length': 120,
-        'disable': ['R1705', 'E9998', 'E9999']
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['move_tree',
+                          'openings_reader',
+                          'Optional',
+                          'chess_data',
+                          'traverser'
+                          'game_reader'],
+        'allowed-io': ['select_dataset', 'run'],
+        'max-nested-blocks': 4
     })

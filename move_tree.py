@@ -7,7 +7,7 @@ The root of a MoveTree should be the original starting board (no moves)
 from __future__ import annotations
 from typing import Optional
 import pandas as pd
-from ChessData import ChessData
+from chess_data import ChessData
 
 
 class MoveTree:
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     python_ta.check_all(config={
         'max-line-length': 120,
         'disable': ['E1136', 'W0221'],
-        'extra-imports': ['MoveTree', 'percentify', 'Optional', 'pandas', 'ChessData'],
-        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'extra-imports': ['Optional', 'pandas', 'chess_data'],
+        'allowed-io': ['MoveTree.print_stats'],
         'max-nested-blocks': 4
     })

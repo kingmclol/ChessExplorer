@@ -1,11 +1,11 @@
 """
 main is where the program is run.
 """
-from OpeningsReader import get_openings
-from GameReader import read_pgn
-from MoveTree import MoveTree
-from ChessData import ChessData
-from Traverser import Traverser
+from openings_reader import get_openings
+from game_reader import read_pgn
+from move_tree import MoveTree
+from chess_data import ChessData
+from traverser import Traverser
 
 ALL_GAMES = [
     "data/games/lichess_tournament_2025.03.26_G0j0ZKLB_2000-superblitz (1).pgn",
@@ -85,9 +85,25 @@ def max_moves() -> int:
             print("Please enter a number between 1 and 5.")
 
 
-
-
 if __name__ == '__main__':
+    # Comment out later.
+    import doctest
+
+    doctest.testmod(verbose=True)
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['move_tree',
+                          'chess_data',
+                          'traverser',
+                          'openings_reader' # Idk how to make it allow for these imports.
+                          'game_reader'],
+        'allowed-io': ['select_dataset', 'start', 'max_moves'],
+        'max-nested-blocks': 4
+    })
+
     start()
     moves = max_moves()
     print("Loading openings...")

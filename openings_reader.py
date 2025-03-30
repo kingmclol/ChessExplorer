@@ -36,9 +36,6 @@ def _clean_moves(moves: str) -> list[str]:
     >>> _clean_moves('1. d4 f5 2. c4 Nf6 3. g3 e6 4. Bg2 Be7 5. Nf3 O-O 6. O-O d5')
     ['d4', 'f5', 'c4', 'Nf6', 'g3', 'e6', 'Bg2', 'Be7', 'Nf3', 'O-O', 'O-O', 'd5']
     """
-    # pattern=r"\d\.\s"
-    # clean = sub(pattern, "", moves)
-    # return clean.split()
     return [move for move in moves.split() if move[-1] != '.']
 
 
@@ -46,3 +43,13 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod(verbose=True)
+
+    import python_ta
+
+    python_ta.check_all(config={
+        'max-line-length': 120,
+        'disable': ['E1136', 'W0221'],
+        'extra-imports': ['csv'],
+        'allowed-io': ['get_openings'],
+        'max-nested-blocks': 4
+    })

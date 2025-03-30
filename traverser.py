@@ -4,8 +4,8 @@ Traverser is the class that takes in the MoveTree and allows for user interactio
 Commands emulate navigation of a filesystem using the terminal; directories are MoveTrees.
 """
 from typing import Optional
-from MoveTree import MoveTree
-from ChessData import percentify
+from move_tree import MoveTree
+from chess_data import percentify
 
 PADDING_PLAYRATE = 12
 PADDING_NEXT_MOVE = 12
@@ -179,7 +179,6 @@ class Traverser:
         Attempt to traverse through the given path, just like how a cd in the terminal would.
         """
         moves = param.split("/")
-        # TODO: Make this readable
         test = self._current
         test_path = self._path.copy()
         for move in moves:
@@ -253,7 +252,13 @@ if __name__ == '__main__':
     python_ta.check_all(config={
         'max-line-length': 120,
         'disable': ['E1136', 'W0221'],
-        'extra-imports': ['MoveTree', 'percentify', 'Optional', 'ChessData'],
-        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],
+        'extra-imports': ['move_tree', 'percentify', 'Optional', 'chess_data'],
+        'allowed-io': ['Traverser._print_moves',
+                       'Traverser.output_tree',
+                       'Traverser.output_help',
+                       'Traverser.output_stats',
+                       'Traverser.ls'
+                       'Traverser.apply_traverse'
+                       'Traverser.handle_input'],
         'max-nested-blocks': 4
     })

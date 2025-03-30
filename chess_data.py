@@ -125,7 +125,7 @@ if __name__ == '__main__':
     python_ta.check_all(config={
         'max-line-length': 120,
         'disable': ['E1136', 'W0221'],
-        'extra-imports': ['MoveTree', 'percentify', 'Optional', 'ChessData', 'pandas'],
-        'allowed-io': ['_print_moves', 'output_tree', 'output_help', 'output_stats', 'ls'],  # What the fuck
+        'extra-imports': ['move_tree', 'percentify', 'Optional', 'chess_data', 'pandas'],
+        'allowed-io': ['ChessData.output_stats'],
         'max-nested-blocks': 4
     })
