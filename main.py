@@ -72,17 +72,17 @@ def max_moves() -> int:
     """
     Return max moves the user wants to use from 1-5
     """
-    while True:  # literally can't bother fixing your stuff
+    choice = None
+    while choice is None or not 1 <= choice <= 5:
         try:
             choice = int(input("Enter maximum number of opening moves from 1-5: "))
-            if 1 <= choice <= 5:
-                return choice
-            else:
+            if not 1 <= choice <= 5:
                 print("Please enter a number between 1 and 5.")
         except ValueError:
             print("Please enter a number between 1 and 5.")
-        except TypeError:
-            print("Please enter a number between 1 and 5.")
+            choice = None
+    return choice
+    
 
 if __name__ == '__main__':
     # Comment out later.
