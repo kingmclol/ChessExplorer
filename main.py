@@ -83,7 +83,6 @@ def max_moves() -> int:
             print("Please enter a number between 1 and 5.")
         except TypeError:
             print("Please enter a number between 1 and 5.")
-    return 3 # Default value of moves
 
 if __name__ == '__main__':
     # Comment out later.
