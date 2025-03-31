@@ -6,7 +6,7 @@ import csv
 
 def get_openings(path: str, max_moves: int = -1) -> dict[tuple[str, ...], str]:
     """
-    Return a dictionary mapping betwee TUPLES of moves to the name of the opening,
+    Return a dictionary mapping between TUPLES of moves to the name of the opening,
     restricted to the max number of moves given from the ECO .tsv files located in the given PATH (directory)
     a.tsv, b.tsv, etc.
 
